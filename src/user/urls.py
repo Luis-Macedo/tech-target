@@ -5,8 +5,8 @@ from . import cpfViews
 
 urlpatterns = [
     path('listAll/common', listViews.allCommon, name="allCommon"),
-    path('listAll/cpf', listViews.allCpf, name="allCpf"),
-    path('listAll/cnpj', listViews.allCnpj, name="allCnpj"),
+    path('listAll/cpf', cpfViews.allCpf, name="allCpf"),
+    path('listAll/cnpj', cnpjViews.allCnpj, name="allCnpj"),
     path('listAll/segment', listViews.allSegment, name="allSegment"),
     path('listAll/gender', listViews.allGender, name="allGender"),
     path('listAll/civil', listViews.allCivil, name="allCivil"),

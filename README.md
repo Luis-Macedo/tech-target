@@ -34,9 +34,9 @@ Now, we install Django
 
 Once installed, you can change to src directory
 
-## Installation - Inside de src directory
+## Installation - Inside the src directory
 
-### Before going into the steps ahead, be sure to setup your database connection 
+### Before going further, be sure to setup your database connection 
 ### Your database connection will be inside src/techTarget/settings.py
 
 Once you have setup your database, you'll run the following commands for migrations:
