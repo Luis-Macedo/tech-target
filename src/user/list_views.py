@@ -1,15 +1,13 @@
 import json
-from django.core.serializers import serialize
 from django.http import HttpResponse
 from .models import *
 
-def cityPerState(request, state):
+def city_per_state(request, state):
     if request.method == 'GET':
         qs = Country_city.objects.select_related().filter(state=state)
-        list = []
+        list = [{"response_status": HttpResponse.status_code}]
         for row in qs:
             list.append({
-                'response_status': HttpResponse.status_code,
                 'city_id': row.id,
                 'city_code': row.city_code,
                 'city_name': row.city_name,
@@ -25,10 +23,20 @@ def cityPerState(request, state):
         msg = json.dumps(msg)
         return HttpResponse(msg, content_type="application/json")
 
-def allCommon(request):
+def all_common(request):
     if request.method == 'GET':
         qs = Common_user.objects.all()
-        data = serialize("json", qs)
+        list = [{"response_status": HttpResponse.status_code}]
+        for row in qs:
+            list.append({
+                "common_user_id": row.id,
+                "user_name": row.user_name,
+                "user_email": row.user_email,
+                "user_phone": row.user_phone,
+                "user_city": row.user_city.city_name 
+            })
+        
+        data = json.dumps(list)
         return HttpResponse(data, content_type="application/json")
     else:
         msg = [{
@@ -38,10 +46,17 @@ def allCommon(request):
         msg = json.dumps(msg)
         return HttpResponse(msg, content_type="application/json")
 
-def allGender(request):
+def all_gender(request):
     if request.method == 'GET':
         qs = Gender.objects.all()
-        data = serialize("json", qs)
+        list = [{"response_status": HttpResponse.status_code}]
+        for row in qs:
+            list.append({
+                "gender_id": row.id,
+                "gender_name": row.name,
+                "gender_description": row.description,
+            })
+        data = json.dumps(list)
         return HttpResponse(data, content_type="application/json")
     else:
         msg = [{
@@ -51,10 +66,17 @@ def allGender(request):
         msg = json.dumps(msg)
         return HttpResponse(msg, content_type="application/json")
 
-def allSegment(request):
+def all_segment(request):
     if request.method == 'GET':
         qs = Segment.objects.all()
-        data = serialize("json", qs)
+        list = [{"response_status": HttpResponse.status_code}]
+        for row in qs:
+            list.append({
+                "segment_id": row.id,
+                "segment_title": row.title,
+                "segment_description": row.description,
+            })
+        data = json.dumps(list)
         return HttpResponse(data, content_type="application/json")
     else:
         msg = [{
@@ -64,10 +86,17 @@ def allSegment(request):
         msg = json.dumps(msg)
         return HttpResponse(msg, content_type="application/json")
 
-def allCivil(request):
+def all_civil(request):
     if request.method == 'GET':
         qs = Civil_stat.objects.all()
-        data = serialize("json", qs)
+        list = [{"response_status": HttpResponse.status_code}]
+        for row in qs:
+            list.append({
+                "civil_status_id": row.id,
+                "civil_status_name": row.status_name,
+                "civil_status_description": row.status_description,
+            })
+        data = json.dumps(list)
         return HttpResponse(data, content_type="application/json")
     else:
         msg = [{

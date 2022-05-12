@@ -4,10 +4,22 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from .models import *
 
-def allCnpj(request):
+def all_cnpj(request):
     if request.method == 'GET':
         qs = User_cnpj.objects.all()
-        data = serialize("json", qs)
+        list = [{"response_status": HttpResponse.status_code}]
+        for row in qs:
+            list.append({
+                "user_cnpj_id": row.id,
+                "cnpj": row.cnpj,
+                "user_cnpj_fancy_name": row.fancy_name,
+                "user_cnpj_corporate_name": row.corporate_name,
+                "user_email": row.common_user.user_email,
+                "user_phone": row.common_user.user_phone,
+                "user_city": row.common_user.user_city.city_name 
+            })
+        
+        data = json.dumps(list)
         return HttpResponse(data, content_type="application/json")
     else:
         msg = [{
@@ -17,13 +29,12 @@ def allCnpj(request):
         msg = json.dumps(msg)
         return HttpResponse(msg, content_type="application/json")
 
-def oneCnpj(request, user_cnpj_id):
+def one_cnpj(request, user_cnpj_id):
     if request.method == 'GET':
         qs = User_cnpj.objects.select_related().filter(id = user_cnpj_id)
-        list = []
+        list = [{"response_status": HttpResponse.status_code}]
         for row in qs:
             list.append({
-                'response_status': HttpResponse.status_code,
                 'common_user_id': row.common_user.id,
                 'user_cnpj_id': row.id,
                 'user_cnpj_corporate_name': row.corporate_name,
@@ -43,7 +54,7 @@ def oneCnpj(request, user_cnpj_id):
         return HttpResponse(msg, content_type="application/json")
 
 @csrf_exempt
-def createCnpj(request):
+def create_cnpj(request):
     if request.method == 'POST':
 
         body_unicode = request.body.decode('utf-8')
@@ -54,12 +65,12 @@ def createCnpj(request):
             user = Common_user.objects.create(
                 user_name = body_data["user_name"], user_email = body_data["user_email"],
                 user_password = body_data["user_password"], user_phone = body_data["user_phone"],
-                user_city = body_data["user_city"], user_address = body_data["user_address"]
+                user_city_id = body_data["user_city"], user_address = body_data["user_address"]
             )
             result = User_cnpj.objects.create(
                 common_user_id = user.id, cnpj = body_data["cnpj"],
                 corporate_name = body_data["corporate_name"], fancy_name = body_data["fancy_name"],
-                segments = body_data["segments"]
+                segments_id = body_data["segments"]
             )
 
             data = User_cnpj.objects.filter(id=result.id)

@@ -81,7 +81,7 @@ class User_cpf(models.Model):
     civil_status = models.ForeignKey(Civil_stat, on_delete=models.CASCADE, related_name='civilStatUser')
 
     def __str__(self):
-        return f'{self.name} {self.last_name}'
+        return self.name
 
 class User_cpf_interest(models.Model):
     user_cpf = models.ForeignKey(User_cpf, on_delete=models.CASCADE, related_name='usersInterests')
