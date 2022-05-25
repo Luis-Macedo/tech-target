@@ -13,6 +13,7 @@ urlpatterns = [
     path('listOne/cnpj/<int:user_cnpj_id>', cnpj_views.one_cnpj, name='one_cnpj'),
     path('listOne/cpf/<int:user_cpf_id>', cpf_views.one_cpf, name='one_cpf'),
     path('listCity/perState/<str:state>', list_views.city_per_state, name='city_per_state'),
+    path('listStates', list_views.all_states, name="listStates"),
 
     path('create/cnpj', cnpj_views.create_cnpj, name="create_cnpj"),
     path('create/cpf', cpf_views.create_cpf, name="create_cpf")

@@ -1,6 +1,7 @@
 import json
 from django.http import HttpResponse
 from .models import *
+from techTarget.request_method_utils import *
 
 def city_per_state(request, state):
     if request.method == 'GET':
@@ -16,11 +17,24 @@ def city_per_state(request, state):
         data = json.dumps(list)
         return HttpResponse(data, content_type="application/json")
     else:
-        msg = [{
-            'response_status': HttpResponse.status_code,
-            'error': "[INFO] Must be a GET method"
-        }]
-        msg = json.dumps(msg)
+        msg = get_method_error()
+        return HttpResponse(msg, content_type="application/json")
+
+def all_states(request):
+    if request.method == "GET":
+        qs = Country_state.objects.select_related()
+        list = [{"response_status": HttpResponse.status_code}]
+        for row in qs:
+            list.append({
+                'state_code': row.state_code,
+                'state_name': row.state_name,
+                'acronym': row.acronym,
+                "region": row.region.region_name
+            })
+        data = json.dumps(list)
+        return HttpResponse(data, content_type="application/json")
+    else:
+        msg = get_method_error()
         return HttpResponse(msg, content_type="application/json")
 
 def all_common(request):
@@ -35,15 +49,10 @@ def all_common(request):
                 "user_phone": row.user_phone,
                 "user_city": row.user_city.city_name 
             })
-        
         data = json.dumps(list)
         return HttpResponse(data, content_type="application/json")
     else:
-        msg = [{
-            'response_status': HttpResponse.status_code,
-            'error': "[INFO] Must be a GET method"
-        }]
-        msg = json.dumps(msg)
+        msg = get_method_error
         return HttpResponse(msg, content_type="application/json")
 
 def all_gender(request):
@@ -59,11 +68,7 @@ def all_gender(request):
         data = json.dumps(list)
         return HttpResponse(data, content_type="application/json")
     else:
-        msg = [{
-            'response_status': HttpResponse.status_code,
-            'error': "[INFO] Must be a GET method"
-        }]
-        msg = json.dumps(msg)
+        msg = get_method_error()
         return HttpResponse(msg, content_type="application/json")
 
 def all_segment(request):
@@ -79,11 +84,7 @@ def all_segment(request):
         data = json.dumps(list)
         return HttpResponse(data, content_type="application/json")
     else:
-        msg = [{
-            'response_status': HttpResponse.status_code,
-            'error': "[INFO] Must be a GET method"
-        }]
-        msg = json.dumps(msg)
+        msg = get_method_error()
         return HttpResponse(msg, content_type="application/json")
 
 def all_civil(request):
@@ -99,9 +100,5 @@ def all_civil(request):
         data = json.dumps(list)
         return HttpResponse(data, content_type="application/json")
     else:
-        msg = [{
-            'response_status': HttpResponse.status_code,
-            'error': "[INFO] Must be a GET method"
-        }]
-        msg = json.dumps(msg)
+        msg = get_method_error()
         return HttpResponse(msg, content_type="application/json")

@@ -10,8 +10,8 @@ providing technical support for startups and small business.
 Install techTarget backend with python 3.9+/ pip and venv.
 
 ```bash
-  py -m pip install venv
-  or python -m pip install venv
+  py -m pip install virtualenv
+  or python -m pip install virtualenv
 ```
 ## Installation - Setting the environment inside the repository
 
@@ -26,10 +26,11 @@ At this point you'll be able to have a python environment for proper working alo
 
 ## Installation - Installing Django
 
-Now, we install Django
+Now, we install Django and other dependencies
 
 ```bash
   pip install Django
+  pip install psycopg2
 ```
 
 Once installed, you can change to src directory

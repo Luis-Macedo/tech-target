@@ -4,55 +4,25 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from .models import *
+from techTarget.request_method_utils import *
+from .cpf_utils import *
 
 def all_cpf(request):
     if request.method == 'GET':
         qs = User_cpf.objects.all()
-        list = [{"response_status": HttpResponse.status_code}]
-        for row in qs:
-            list.append({
-                "user_cpf_id": row.id,
-                "cpf": row.cpf,
-                "user_cpf_name": row.name,
-                "user_cpf_last_name": row.last_name,
-                "user_email": row.common_user.user_email,
-                "user_phone": row.common_user.user_phone,
-                "user_city": row.common_user.user_city.city_name 
-            })
-        
-        data = json.dumps(list)
+        data = cpf_response(qs)
         return HttpResponse(data, content_type="application/json")
     else:
-        msg = [{
-            'response_status': HttpResponse.status_code,
-            'error': "[INFO] Must be a GET method"
-        }]
-        msg = json.dumps(msg)
+        msg = get_method_error()
         return HttpResponse(msg, content_type="application/json")
 
 def one_cpf(request, user_cpf_id):
     if request.method == 'GET':
         qs = User_cpf.objects.select_related().filter(id = user_cpf_id)
-        list = [{"response_status": HttpResponse.status_code}]
-        for row in qs:
-            list.append({
-                'common_user_id': row.common_user.id,
-                'user_cpf_id': row.id,
-                'user_cpf_name': row.name,
-                'user_cpf_last_name': row.last_name,
-                'user_cpf_gender': row.gender.name,
-                'user_cpf_email': row.common_user.user_email,
-                'user_cpf_city': row.common_user.user_city.city_name,
-                'user_cpf_state': row.common_user.user_city.state.state_name
-            })
-        data = json.dumps(list)
+        data = cpf_response(qs)
         return HttpResponse(data, content_type="application/json")
     else:
-        msg = [{
-            'response_status': HttpResponse.status_code,
-            'error': "[INFO] Must be a GET method"
-        }]
-        msg = json.dumps(msg)
+        msg = get_method_error()
         return HttpResponse(msg, content_type="application/json")
 
 @csrf_exempt
@@ -63,7 +33,6 @@ def create_cpf(request):
         body_data = json.loads(body_unicode)
 
         try:
-            
             birth_date = body_data["birth_date"]
             birth_date = datetime.strptime(birth_date, '%Y-%m-%d')
 
@@ -82,18 +51,12 @@ def create_cpf(request):
             data = User_cpf.objects.filter(id=result.id)
             data = serialize("json", data)
             return HttpResponse(data, content_type="application/json")   
-
         except:
             msg = [{
                 "message": "[INFO] Creation failed!"
             }]
             msg = json.dumps(msg)
             return HttpResponse(msg, content_type="application/json")   
-
     else:
-        msg = [{
-            'response_status': HttpResponse.status_code,
-            "error": "[INFO] Must be a POST method!" 
-        }]
-        msg = json.dumps(msg)
+        msg = post_method_error()
         return HttpResponse(msg, content_type="application/json")

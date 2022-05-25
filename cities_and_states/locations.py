@@ -24,10 +24,6 @@ def export_region(connect):
             
     except:
         print("erro na regiao")
-    
-    f.close()
-    connect.close()
-
 
 def export_state(connect):
 
@@ -46,9 +42,7 @@ def export_state(connect):
     except:
         print("erro no estado")
     
-    f.close()
-    connect.close()
-
+    
 def export_city(connect):
     f = open ('municipios.json', "r", encoding='utf-8')
     data = json.loads(f.read())
