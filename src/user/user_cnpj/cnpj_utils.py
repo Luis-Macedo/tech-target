@@ -1,5 +1,6 @@
 import json
 from django.http import HttpResponse
+from ..models import User_cnpj
 
 def cnpj_response(qs):
     list = [{"response_status": HttpResponse.status_code}]
@@ -15,3 +16,13 @@ def cnpj_response(qs):
         })
     data = json.dumps(list)
     return data
+
+def insert_user_cnpj(user, common_user_id):
+
+    user_cnpj = User_cnpj.objects.create(
+        common_user_id = common_user_id, cnpj = user["cnpj"],
+        corporate_name = user["corporate_name"], fancy_name = user["fancy_name"],
+        segments_id = user["segments"]
+    )
+
+    return user_cnpj

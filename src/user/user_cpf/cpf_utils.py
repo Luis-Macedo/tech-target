@@ -1,5 +1,6 @@
 import json
 from django.http import HttpResponse
+from ..models import User_cpf
 
 def cpf_response(qs):
     list = [{"response_status": HttpResponse.status_code}]
@@ -19,3 +20,13 @@ def cpf_response(qs):
         })
     data = json.dumps(list)
     return data
+
+def insert_user_cpf(user, common_user_id):
+
+    user_cpf = User_cpf.objects.create(
+        cpf = user["cpf"], name = user["name"], last_name = user["last_name"],
+        birth_date = user["birth_date"], profession = user["profession"], 
+        civil_status_id = user["civil_status_id"],
+        common_user_id = common_user_id, gender_id = user["gender_id"]
+    )
+    return user_cpf

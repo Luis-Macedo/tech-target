@@ -1,9 +1,8 @@
 import json
-from django.core.serializers import serialize
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime
-from .models import *
+from user.common_user.common_user_utils import insert_common_user
+from ..models import *
 from techTarget.request_method_utils import *
 from .cpf_utils import *
 
@@ -33,23 +32,11 @@ def create_cpf(request):
         body_data = json.loads(body_unicode)
 
         try:
-            birth_date = body_data["birth_date"]
-            birth_date = datetime.strptime(birth_date, '%Y-%m-%d')
+            common_user = insert_common_user(body_data)
+            user_cpf = insert_user_cpf(body_data, common_user.id)
 
-            user = Common_user.objects.create(
-                user_name = body_data["user_name"], user_email = body_data["user_email"],
-                user_password = body_data["user_password"], user_phone = body_data["user_phone"],
-                user_city_id = body_data["user_city"], user_address = body_data["user_address"]
-            )
-            result = User_cpf.objects.create(
-                cpf = body_data["cpf"], name = body_data["name"], last_name = body_data["last_name"],
-                birth_date = birth_date, profession = body_data["profession"], 
-                civil_status_id = body_data["civil_status_id"],
-                common_user_id = user.id, gender_id = body_data["gender_id"]
-            )
-
-            data = User_cpf.objects.filter(id=result.id)
-            data = serialize("json", data)
+            data = User_cpf.objects.select_related().filter(id=user_cpf.id)
+            data = cpf_response(data)
             return HttpResponse(data, content_type="application/json")   
         except:
             msg = [{

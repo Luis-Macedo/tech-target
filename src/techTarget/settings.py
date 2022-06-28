@@ -1,5 +1,6 @@
 
 from pathlib import Path
+from pickle import FALSE
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +26,7 @@ INSTALLED_APPS = [
     'posts',
     'login',
     'user',
+    'dashboards',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,7 +76,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'techtarget',
         'USER': 'postgres',
-        'PASSWORD': 'macedo',
+        'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '5432',
     }

@@ -1,8 +1,8 @@
 import json
-from django.core.serializers import serialize
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-from .models import *
+from user.common_user.common_user_utils import insert_common_user
+from ..models import *
 from techTarget.request_method_utils import *
 from .cnpj_utils import *
 
@@ -32,19 +32,11 @@ def create_cnpj(request):
         body_data = json.loads(body_unicode)
 
         try:
-            user = Common_user.objects.create(
-                user_name = body_data["user_name"], user_email = body_data["user_email"],
-                user_password = body_data["user_password"], user_phone = body_data["user_phone"],
-                user_city_id = body_data["user_city"], user_address = body_data["user_address"]
-            )
-            result = User_cnpj.objects.create(
-                common_user_id = user.id, cnpj = body_data["cnpj"],
-                corporate_name = body_data["corporate_name"], fancy_name = body_data["fancy_name"],
-                segments_id = body_data["segments"]
-            )
+            common_user = insert_common_user(body_data)
+            user_cnpj = insert_user_cnpj(body_data, common_user.id)
 
-            data = User_cnpj.objects.filter(id=result.id)
-            data = serialize("json", data)
+            data = User_cnpj.objects.select_related().filter(id=user_cnpj.id)
+            data = cnpj_response(data)
             return HttpResponse(data, content_type="application/json")   
         except:
             msg = [{

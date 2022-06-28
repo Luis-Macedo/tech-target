@@ -15,7 +15,8 @@ def cpf_login(qs):
             "user_cpf_civil_status": row.civil_status.status_name,
             "user_cpf_city": row.common_user.user_city.city_name,
             "user_cpf_state": row.common_user.user_city.state.state_name,
-            "logged": True
+            "logged": True,
+            "company": False
         })
     data = json.dumps(list)
     return data
@@ -34,6 +35,7 @@ def cnpj_login(qs):
             "user_cnpj_state": row.common_user.user_city.state.state_name, 
             "user_cnpj_region": row.common_user.user_city.state.region.region_name,
             "user_cnpj_logged": True,
+            "company": True
         })
     data = json.dumps(list)
     return data

@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponse
-from .models import *
+from ..models import *
 from techTarget.request_method_utils import *
 
 def city_per_state(request, state):

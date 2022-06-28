@@ -1,7 +1,7 @@
 from django.urls import path
-from . import list_views
-from . import cnpj_views
-from . import cpf_views
+from .list import list_views
+from .user_cnpj import cnpj_views
+from .user_cpf import cpf_views
 
 urlpatterns = [
     path('listAll/common', list_views.all_common, name="all_common"),
